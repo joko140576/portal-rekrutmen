@@ -7,19 +7,28 @@
 
 <!-- Bootstrap 5 -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Bootstrap Icons -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
 <style>
+
 body {
-  background: radial-gradient(circle at top, #1b2735, #090a0f);
-  color: #fff;
   min-height: 100vh;
   font-family: 'Segoe UI', sans-serif;
+  color: #fff;
+
+  background:
+    linear-gradient(rgba(2,6,23,.55), rgba(2,6,23,.55)),
+    url("https://images.unsplash.com/photo-1492138786289-d35ea832da43?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D") 
+    no-repeat center center fixed;
+
+  background-size: cover;
 }
 
-/* CARD */
+
+
 .process-card {
   background: rgba(20, 25, 40, 0.9);
   border-radius: 18px;
@@ -28,62 +37,36 @@ body {
   cursor: pointer;
   border: 1px solid rgba(0, 255, 255, 0.15);
   transition: all 0.35s ease;
-  position: relative;
-  overflow: hidden;
 }
 
-/* GLOW BORDER */
-.process-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 18px;
-  background: linear-gradient(120deg, #00eaff, #007bff, #00eaff);
-  opacity: 0;
-  filter: blur(15px);
-  transition: opacity 0.4s;
-  z-index: -1;
-}
-
-.process-card:hover::before,
-.process-card.active::before {
-  opacity: 1;
-}
-
-.process-card:hover,
-.process-card.active {
+.process-card:hover {
   transform: translateY(-10px) scale(1.05);
-  box-shadow: 
-    0 0 25px rgba(0, 234, 255, 0.8),
-    0 0 50px rgba(0, 123, 255, 0.6);
-  border-color: #00eaff;
+  box-shadow: 0 0 35px rgba(0,234,255,.8);
 }
 
-/* ICON */
 .process-card i {
   font-size: 48px;
   color: #00eaff;
-  margin-bottom: 12px;
-  transition: all 0.3s;
+  margin-bottom: 10px;
 }
 
-.process-card:hover i,
-.process-card.active i {
-  color: #ffffff;
-  text-shadow: 0 0 15px #00eaff;
+.modal-content {
+  background: #0f172a;
+  border-radius: 18px;
+  box-shadow: 0 0 40px rgba(0,234,255,.5);
 }
 
-/* TEXT */
-.process-title {
-  font-size: 17px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+.modal-header,
+.modal-footer {
+  border-color: rgba(255,255,255,.1);
 }
 
-.process-number {
-  font-size: 13px;
-  opacity: 0.7;
-  margin-bottom: 4px;
+.modal-body p {
+  margin-bottom: 10px;
+}
+
+.modal-body ul {
+  padding-left: 18px;
 }
 </style>
 </head>
@@ -91,100 +74,149 @@ body {
 <body>
 
 <div class="container py-5">
-  <h2 class="text-center mb-5 fw-bold text-info">
-    Skema Proses Rekrutmen
-  </h2>
+  <h2 class="text-center mb-5 fw-bold text-info">Skema Proses Rekrutmen</h2>
 
   <div class="row g-4 justify-content-center">
 
     <div class="col-md-4 col-lg-2">
-      <div class="process-card" onclick="klik(this,'Lowongan')">
+      <div class="process-card" onclick="openModal('Lowongan')">
         <i class="bi bi-briefcase-fill"></i>
-        <div class="process-number">Tahap 1</div>
-        <div class="process-title">Lowongan</div>
+        <div>Tahap 1</div>
+        <strong>Lowongan</strong>
       </div>
     </div>
 
     <div class="col-md-4 col-lg-2">
-      <div class="process-card" onclick="klik(this,'Filter')">
+      <div class="process-card" onclick="openModal('checker')">
         <i class="bi bi-funnel-fill"></i>
-        <div class="process-number">Tahap 2</div>
-        <div class="process-title">Filter</div>
+        <div>Tahap 2</div>
+        <strong>checker</strong>
       </div>
     </div>
 
     <div class="col-md-4 col-lg-2">
-      <div class="process-card" onclick="klik(this,'Wawancara')">
+      <div class="process-card" onclick="openModal('Wawancara')">
         <i class="bi bi-chat-dots-fill"></i>
-        <div class="process-number">Tahap 3</div>
-        <div class="process-title">Wawancara</div>
+        <div>Tahap 3</div>
+        <strong>Wawancara</strong>
       </div>
     </div>
 
     <div class="col-md-4 col-lg-2">
-      <div class="process-card" onclick="klik(this,'Test')">
+      <div class="process-card" onclick="openModal('Test')">
         <i class="bi bi-pencil-square"></i>
-        <div class="process-number">Tahap 4</div>
-        <div class="process-title">Test</div>
+        <div>Tahap 4</div>
+        <strong>Test</strong>
       </div>
     </div>
 
     <div class="col-md-4 col-lg-2">
-      <div class="process-card" onclick="klik(this,'Penerimaan')">
+      <div class="process-card" onclick="openModal('Penerimaan')">
         <i class="bi bi-check-circle-fill"></i>
-        <div class="process-number">Tahap 5</div>
-        <div class="process-title">Penerimaan</div>
+        <div>Tahap 5</div>
+        <strong>Penerimaan</strong>
       </div>
     </div>
 
     <div class="col-md-4 col-lg-2">
-      <div class="process-card" onclick="klik(this,'Onboard Training')">
+      <div class="process-card" onclick="openModal('Onboard Training')">
         <i class="bi bi-people-fill"></i>
-        <div class="process-number">Tahap 6</div>
-        <div class="process-title">Onboard Training</div>
+        <div>Tahap 6</div>
+        <strong>Onboard Training</strong>
       </div>
     </div>
 
   </div>
 </div>
 
+<!-- MODAL -->
+<div class="modal fade" id="infoModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-light">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle"></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="modalDesc"></div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+        <a id="modalLink" href="#" target="_blank" class="btn btn-info">
+          Buka Halaman
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
-function klik(el, tahap) {
-  // efek active tetap jalan
-  document.querySelectorAll('.process-card').forEach(card => {
-    card.classList.remove('active');
-  });
-  el.classList.add('active');
-
-  // routing link
-  let url = "#";
-
-  switch (tahap) {
-    case 'Lowongan':
-      url = "https://lamaran-ssi.vercel.app/";
-      break;
-    case 'Filter':
-      url = "https://checker-hcc.vercel.app/";
-      break;
-    case 'Wawancara':
-      url = "https://wawancara-ssi.vercel.app/";
-      break;
-    case 'Test':
-      url = "google.com";
-      break;
-    case 'Penerimaan':
-    case 'Onboard Training':
-      url = "https://portal-training.vercel.app";
-      break;
+const modalData = {
+  "Lowongan": {
+    desc: `
+      <p><strong>Deskripsi:</strong></p>
+      <p>Divisi HCC telah mengembangkan form lowongan kerja berbasis web yang dikelola secara mandiri</p>
+      <ul>
+        <li>Seluruh data pelamar akan tersimpan dan terintegrasi dalam database Divisi HCC</li>
+        <li>Untuk mengakses form lowongan kerja tersebut, silakan kunjungi website melalui tautan berikut:
+        https://lamaran-ssi.vercel.app/ </li>
+        <li>Anda juga dapat melihat dan mengisi form dengan mengklik tombol di bawah ini.</li>
+      </ul>
+    `,
+    link: "https://lamaran-ssi.vercel.app/"
+  },
+  "checker": {
+    desc: `
+      <p>Checker merupakan proses verifikasi untuk menilai rekam jejak seseorang : </p>
+      <ul>
+        <li>pakah yang bersangkutan pernah terlibat dalam tindakan negatif</li>
+        <li>aktivitas kriminal</li>
+        <li>pernah menerima teguran maupun Surat Peringatan</li>
+      </ul>
+    `,
+    link: "https://checker-hcc.vercel.app/"
+  },
+  "Wawancara": {
+    desc: `
+      <p>Wawancara pelamar merupakan tahapan seleksi untuk menggali kompetensi, pengalaman, dan kesesuaian kandidat dengan kebutuhan serta budaya perusahaan.</p>
+    `,
+    link: "https://wawancara-ssi.vercel.app/"
+  },
+  "Test": {
+    desc: `
+      <p>Tes kompetensi untuk mengukur kemampuan teknis dan psikologi kandidat.</p>
+      <ul>
+        <li>Tes Psykotes</li>
+        <li>Tes Kemampuan Dasar</li>
+      </ul>
+    `,
+    link: "https://www.google.com"
+  },
+  "Penerimaan": {
+    desc: `
+      <p>Berisi Informasi atau Database yang menjadi pusat informasi kandidat yang mendukung pengambilan keputusan dalam proses seleksi karyawan.</p>
+    `,
+    link: "https://portal-training.vercel.app"
+  },
+  "Onboard Training": {
+    desc: `
+      <p>Program onboarding dan pelatihan awal bagi karyawan baru.</p>
+      <ul>
+        <li>Pengenalan perusahaan</li>
+        <li>Training Journey perjabatan dari kasir sampai Admin</li>
+        <li>Training SOP /li>
+      </ul>
+    `,
+    link: "https://portal-training.vercel.app"
   }
+};
 
-  // delay sedikit biar efek glowing terlihat
-  setTimeout(() => {
-    window.open(url, "_blank"); // buka tab baru
-  }, 300);
+function openModal(title) {
+  document.getElementById('modalTitle').innerText = title;
+  document.getElementById('modalDesc').innerHTML = modalData[title].desc;
+  document.getElementById('modalLink').href = modalData[title].link;
+
+  new bootstrap.Modal(document.getElementById('infoModal')).show();
 }
 </script>
-
 
 </body>
 </html>
