@@ -150,16 +150,41 @@ body {
 
 <script>
 function klik(el, tahap) {
+  // efek active tetap jalan
   document.querySelectorAll('.process-card').forEach(card => {
     card.classList.remove('active');
   });
-
   el.classList.add('active');
 
-  console.log("Klik tahap:", tahap);
-  // window.location.href = tahap.toLowerCase() + ".html";
+  // routing link
+  let url = "#";
+
+  switch (tahap) {
+    case 'Lowongan':
+      url = "https://lamaran-ssi.vercel.app/";
+      break;
+    case 'Filter':
+      url = "https://www.yahoo.com";
+      break;
+    case 'Wawancara':
+      url = "https://www.google.com";
+      break;
+    case 'Test':
+      url = "https://www.facebook.com";
+      break;
+    case 'Penerimaan':
+    case 'Onboard Training':
+      url = "https://www.youtube.com";
+      break;
+  }
+
+  // delay sedikit biar efek glowing terlihat
+  setTimeout(() => {
+    window.open(url, "_blank"); // buka tab baru
+  }, 300);
 }
 </script>
+
 
 </body>
 </html>
