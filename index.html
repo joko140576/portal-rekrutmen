@@ -27,8 +27,6 @@ body {
   background-size: cover;
 }
 
-
-
 .process-card {
   background: rgba(20, 25, 40, 0.9);
   border-radius: 18px;
@@ -68,10 +66,37 @@ body {
 .modal-body ul {
   padding-left: 18px;
 }
+
+/* ===== PASSWORD OVERLAY ===== */
+#passwordOverlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(rgba(2,6,23,.9), rgba(2,6,23,.9));
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 </style>
 </head>
 
 <body>
+
+<!-- PASSWORD SCREEN -->
+<div id="passwordOverlay">
+  <div class="card text-dark p-4 shadow-lg" style="min-width:320px;border-radius:16px;">
+    <h5 class="mb-3 text-center fw-bold">🔒 Akses Terbatas</h5>
+    <p class="text-center text-muted small">
+      Masukkan password untuk membuka halaman
+    </p>
+    <input type="password" id="passwordInput" class="form-control mb-3" placeholder="Password">
+    <button class="btn btn-info w-100 fw-bold" onclick="checkPassword()">Masuk</button>
+    <div id="passwordError" class="text-danger small mt-2 d-none text-center">
+      Password salah!
+    </div>
+  </div>
+</div>
 
 <div class="container py-5">
   <h2 class="text-center mb-5 fw-bold text-info">Skema Proses Rekrutmen</h2>
@@ -149,6 +174,21 @@ body {
 </div>
 
 <script>
+/* ===== PASSWORD SCRIPT ===== */
+const PAGE_PASSWORD = "hcc2026";
+
+function checkPassword() {
+  const input = document.getElementById("passwordInput").value;
+  const error = document.getElementById("passwordError");
+
+  if (input === PAGE_PASSWORD) {
+    document.getElementById("passwordOverlay").style.display = "none";
+  } else {
+    error.classList.remove("d-none");
+  }
+}
+
+/* ===== ORIGINAL SCRIPT (TIDAK DIUBAH) ===== */
 const modalData = {
   "Lowongan": {
     desc: `
