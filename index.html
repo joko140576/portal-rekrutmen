@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -71,13 +72,21 @@ body {
 #passwordOverlay {
   position: fixed;
   inset: 0;
-  background: linear-gradient(rgba(2,6,23,.9), rgba(2,6,23,.9));
-  backdrop-filter: blur(6px);
   z-index: 9999;
+
+  background:
+    linear-gradient(rgba(2,6,23,.75), rgba(2,6,23,.75)),
+    url("https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1600&auto=format&fit=crop")
+    no-repeat center center fixed;
+
+  background-size: cover;
+  backdrop-filter: blur(8px);
+
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 </style>
 </head>
 
@@ -85,7 +94,9 @@ body {
 
 <!-- PASSWORD SCREEN -->
 <div id="passwordOverlay">
-  <div class="card text-dark p-4 shadow-lg" style="min-width:320px;border-radius:16px;">
+ <div class="card text-dark p-4 shadow-lg"
+     style="min-width:320px;border-radius:16px;
+            box-shadow:0 0 35px rgba(0,234,255,.6);">
     <h5 class="mb-3 text-center fw-bold">🔒 Akses Terbatas</h5>
     <p class="text-center text-muted small">
       Masukkan password untuk membuka halaman
@@ -165,13 +176,26 @@ body {
       <div class="modal-body" id="modalDesc"></div>
       <div class="modal-footer">
         <button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-        <a id="modalLink" href="#" target="_blank" class="btn btn-info">
-          Buka Halaman
-        </a>
+        
+        <!-- TOMBOL DATABASE -->
+      <a id="modalDatabase"
+         href="#"
+         target="_blank"
+         class="btn btn-warning d-none">
+         Database
+      </a>
+
+      <a id="modalLink" href="#" target="_blank" class="btn btn-info">
+        Buka Halaman
+      </a>
+
+      
       </div>
     </div>
   </div>
 </div>
+
+
 
 <script>
 /* ===== PASSWORD SCRIPT ===== */
@@ -189,6 +213,8 @@ function checkPassword() {
 }
 
 /* ===== ORIGINAL SCRIPT (TIDAK DIUBAH) ===== */
+
+
 const modalData = {
   "Lowongan": {
     desc: `
@@ -201,13 +227,14 @@ const modalData = {
         <li>Anda juga dapat melihat dan mengisi form dengan mengklik tombol di bawah ini.</li>
       </ul>
     `,
-    link: "https://lamaran-ssi.vercel.app/"
+    link: "https://lamaran-ssi.vercel.app/",
+    database: "https://google.com"
   },
   "checker": {
     desc: `
       <p>Checker merupakan proses verifikasi untuk menilai rekam jejak seseorang : </p>
       <ul>
-        <li>pakah yang bersangkutan pernah terlibat dalam tindakan negatif</li>
+        <li>Apakah yang bersangkutan pernah terlibat dalam tindakan negatif</li>
         <li>aktivitas kriminal</li>
         <li>pernah menerima teguran maupun Surat Peringatan</li>
       </ul>
@@ -226,6 +253,7 @@ const modalData = {
       <ul>
         <li>Tes Psykotes</li>
         <li>Tes Kemampuan Dasar</li>
+        <li>Tes Pengetahuan ATM</li>
       </ul>
     `,
     link: "https://www.google.com"
@@ -250,12 +278,26 @@ const modalData = {
 };
 
 function openModal(title) {
+  const data = modalData[title];
+
   document.getElementById('modalTitle').innerText = title;
-  document.getElementById('modalDesc').innerHTML = modalData[title].desc;
-  document.getElementById('modalLink').href = modalData[title].link;
+  document.getElementById('modalDesc').innerHTML = data.desc;
+  document.getElementById('modalLink').href = data.link;
+
+  const dbBtn = document.getElementById('modalDatabase');
+
+  if (data.database) {
+    dbBtn.href = data.database;
+    dbBtn.classList.remove("d-none");
+  } else {
+    dbBtn.classList.add("d-none");
+  }
 
   new bootstrap.Modal(document.getElementById('infoModal')).show();
 }
+
+
+
 </script>
 
 </body>
