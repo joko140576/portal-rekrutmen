@@ -64,6 +64,7 @@ body {
             <tr>
               <th><i class="bi bi-clock-history"></i> Timestamp</th>
               <th><i class="bi bi-person-fill"></i> Nama</th>
+              <th><i class="bi bi-home-fill"></i> Domisili </th>
               <th><i class="bi bi-telephone-fill"></i> Telp</th>
               <th><i class="bi bi-hourglass-split"></i> Usia</th>
               <th><i class="bi bi-mortarboard-fill"></i> Pendidikan</th>
@@ -102,6 +103,7 @@ fetch(API_URL)
         <tr>
           <td class="text-center">${row.Timestamp}</td>
           <td class="fw-semibold">${row.nama}</td>
+          <td class="fw-semibold">${row.domisili}</td>
           <td>
             <i class="bi bi-whatsapp text-success"></i>
             ${row.telp}
