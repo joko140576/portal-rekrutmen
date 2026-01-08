@@ -1,0 +1,97 @@
+/*************************************************
+ *  WEB APP – TKD CALON PEGAWAI BARU PT SSI
+ *  FINAL SIMPLE VERSION
+ *************************************************/
+
+function doGet(e) {
+  const action = e.parameter.action;
+  const cb = e.parameter.callback;
+
+  if (action === "getsoal") return getSoal();
+  if (action === "dashboard" && cb) return getDashboard(cb);
+
+  return ContentService.createTextOutput("OK");
+}
+
+function doPost(e) {
+  const action = e.parameter.action;
+  const data = JSON.parse(e.postData.contents);
+
+  if (action === "simpannilai") return simpanNilai(data);
+
+  return ContentService.createTextOutput("NO ACTION");
+}
+
+/* ===================== SOAL ===================== */
+function getSoal() {
+  const sh = SpreadsheetApp.getActive().getSheetByName("SOAL");
+  const rows = sh.getDataRange().getValues();
+  rows.shift();
+
+  const data = rows.map(r => ({
+    soal: r[0],
+    opsiA: r[1],
+    opsiB: r[2],
+    opsiC: r[3],
+    opsiD: r[4],
+    kunci: r[5]
+  }));
+
+  return ContentService
+    .createTextOutput(JSON.stringify(data))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+/* ================= SIMPAN DATA + NILAI (1x SAJA) ================= */
+function simpanNilai(d) {
+  const sh = SpreadsheetApp.getActive().getSheetByName("DATA");
+
+  sh.appendRow([
+    new Date(),       // A Timestamp
+    d.nama,           // B Nama
+    d.domisili,       // C Domisili
+    d.pendidikan,     // D Pendidikan
+    d.status,         // E Status
+    d.pengalaman,     // F Pengalaman
+    d.telepon,        // G Telepon
+    d.nilai           // H Nilai
+  ]);
+
+  return ContentService.createTextOutput("OK");
+}
+
+/* ================= DASHBOARD ================= */
+function getDashboard(callback) {
+  const sh = SpreadsheetApp.getActive().getSheetByName("DATA");
+  const rows = sh.getDataRange().getValues();
+  rows.shift();
+
+  const total = rows.length;
+
+  const rata =
+    total === 0
+      ? 0
+      : Math.round(
+          rows.reduce((s, r) => s + Number(r[7]), 0) / total
+        );
+
+  const tabel = rows.map(r => ({
+    nama: r[1],
+    domisili: r[2],
+    pendidikan: r[3],
+    status: r[4],
+    pengalaman: r[5],
+    telepon: r[6],
+    nilai: r[7]
+  }));
+
+  const result = {
+    totalPeserta: total,
+    rataRata: rata,
+    data: tabel
+  };
+
+  return ContentService
+    .createTextOutput(`${callback}(${JSON.stringify(result)})`)
+    .setMimeType(ContentService.MimeType.JAVASCRIPT);
+}
