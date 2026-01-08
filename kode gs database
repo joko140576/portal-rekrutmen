@@ -1,0 +1,18 @@
+function doGet() {
+  const sheet = SpreadsheetApp
+    .openById("1znrCa83ChXLSxVlpE3A_WmXV87zKDdYQoN5MaCVRiDk")
+    .getSheetByName("Data");
+
+  const data = sheet.getDataRange().getValues();
+  const headers = data.shift();
+
+  const result = data.map(row => {
+    let obj = {};
+    headers.forEach((h, i) => obj[h] = row[i]);
+    return obj;
+  });
+
+  return ContentService
+    .createTextOutput(JSON.stringify(result))
+    .setMimeType(ContentService.MimeType.JSON);
+}
