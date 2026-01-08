@@ -1,0 +1,86 @@
+/* ======================================
+   KONFIGURASI
+====================================== */
+const SHEET_NAME = "data"; 
+// ganti jika nama sheet berbeda
+
+/* ======================================
+   GET DATA (READ)
+   dipanggil oleh:
+   fetch(API + "?action=getData")
+====================================== */
+function doGet(e) {
+  if (e.parameter.action === "getData") {
+    return getData();
+  }
+
+  return ContentService
+    .createTextOutput("Invalid Request")
+    .setMimeType(ContentService.MimeType.TEXT);
+}
+
+function getData() {
+  const sheet = SpreadsheetApp
+    .getActiveSpreadsheet()
+    .getSheetByName(SHEET_NAME);
+
+  const lastRow = sheet.getLastRow();
+
+  // jika belum ada data
+  if (lastRow < 2) {
+    return ContentService
+      .createTextOutput(JSON.stringify([]))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  // Ambil data tanpa header (kolom A–G)
+  const data = sheet
+    .getRange(2, 1, lastRow - 1, 7)
+    .getValues();
+
+  return ContentService
+    .createTextOutput(JSON.stringify(data))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+/* ======================================
+   POST DATA (CREATE)
+   dipanggil oleh:
+   fetch(API, { method:"POST", body:FormData })
+====================================== */
+function doPost(e) {
+  const sheet = SpreadsheetApp
+    .getActiveSpreadsheet()
+    .getSheetByName(SHEET_NAME);
+
+  // FORMAT TANGGAL LAHIR (YYYY-MM-DD) — TANPA JAM
+  const tanggalLahir = e.parameter.tanggal
+    ? Utilities.formatDate(
+        new Date(e.parameter.tanggal),
+        Session.getScriptTimeZone(),
+        "yyyy-MM-dd"
+      )
+    : "";
+
+  sheet.appendRow([
+    e.parameter.nama || "",
+    e.parameter.tempat || "",
+    tanggalLahir,                // TANGGAL BERSIH
+    e.parameter.domisili || "",
+    e.parameter.pendidikan || "",
+    e.parameter.telp || "",
+    e.parameter.jabatan || "",
+    Utilities.formatDate(         // TIMESTAMP SIMPAN
+      new Date(),
+      Session.getScriptTimeZone(),
+      "yyyy-MM-dd HH:mm:ss"
+    )
+  ]);
+
+  return ContentService
+    .createTextOutput(JSON.stringify({
+      status: "success",
+      message: "Data berhasil disimpan"
+    }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
