@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -87,6 +86,25 @@ body {
   justify-content: center;
 }
 
+/* ===== INFO BOX ===== */
+.info-box {
+  margin-top: 50px;
+  padding: 25px 30px;
+  background: rgba(15, 23, 42, 0.6); /* transparan */
+  border: 1px solid rgba(0, 234, 255, 0.25);
+  border-radius: 18px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 30px rgba(0,234,255,.25);
+}
+
+.info-box p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.8;
+  color: #e5f7ff;
+  text-align: center;
+}
+
 </style>
 </head>
 
@@ -165,6 +183,24 @@ body {
   </div>
 </div>
 
+<!-- INFO PENJELASAN -->
+<div class="row justify-content-center">
+  <div class="col-lg-10">
+    <div class="info-box">
+      <p class="text-warning">
+        Portal ini dipakai untuk rekrutment dalam jumlah masif dan sangat urgent
+        atau penerimaan pegawai yang sangat banyak dan bersifat segera,
+        yang mana divisi HCC tentunya akan sulit menjadwalkan sehingga dengan portal ini
+        COU diberi otoritas untuk menseleksi kandidatnya sendiri.
+        <br><br>
+        Untuk penerimaan pegawai yang <strong>ordinary</strong> atau bersifat seperti biasanya,
+        tetap dilakukan koordinasi dengan Team HCC.
+      </p>
+    </div>
+  </div>
+</div>
+
+
 <!-- MODAL -->
 <div class="modal fade" id="infoModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
@@ -188,13 +224,11 @@ body {
       <a id="modalLink" href="#" target="_blank" class="btn btn-info">
         Buka Halaman
       </a>
-
       
       </div>
     </div>
   </div>
 </div>
-
 
 
 <script>
