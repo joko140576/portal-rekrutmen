@@ -4,131 +4,113 @@
 <meta charset="UTF-8">
 <title>Database Pelamar</title>
 
-<!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Bootstrap Icons -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
 <style>
-body {
-  background: linear-gradient(135deg, #e9f1ff, #f8f9fa);
-  min-height: 100vh;
-}
-
-.card {
-  border: none;
-  border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0,0,0,.08);
-}
-
-.table thead th {
-  background: #0d6efd;
-  color: #fff;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.table tbody td {
-  vertical-align: middle;
-}
-
-.badge-edu {
-  background: #e7f1ff;
-  color: #0d6efd;
-}
+body{background:#f4f6fb}
+.card{border-radius:14px;box-shadow:0 10px 25px rgba(0,0,0,.08)}
 </style>
 </head>
 
 <body>
-
 <div class="container py-5">
 
-  <!-- Header -->
-  <div class="text-center mb-4">
-    <h2 class="fw-bold text-primary">
-      <i class="bi bi-database-fill"></i> Database Pelamar
-    </h2>
-    <p class="text-muted mb-0">
-      Data pelamar hasil input template Lowongan HCC
-    </p>
-  </div>
+<h4 class="fw-bold text-primary mb-3">
+<i class="bi bi-database-fill"></i> Database Pelamar
+</h4>
 
-  <!-- Card -->
-  <div class="card">
-    <div class="card-body">
+<div class="card">
+<div class="card-body">
 
-      <div class="table-responsive">
-        <table class="table table-hover align-middle">
-          <thead>
-            <tr>
-              <th><i class="bi bi-clock-history"></i> Timestamp</th>
-              <th><i class="bi bi-person-fill"></i> Nama</th>
-              <th><i class="bi bi-home-fill"></i> Domisili </th>
-              <th><i class="bi bi-telephone-fill"></i> Telp</th>
-              <th><i class="bi bi-hourglass-split"></i> Usia</th>
-              <th><i class="bi bi-mortarboard-fill"></i> Pendidikan</th>
-              <th><i class="bi bi-journal-bookmark-fill"></i> Jurusan</th>
-            </tr>
-          </thead>
-          <tbody id="table-body">
-            <tr>
-              <td colspan="6" class="text-center text-muted">
-                <i class="bi bi-arrow-repeat"></i> Memuat data...
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+<table class="table table-bordered align-middle">
+<thead class="table-primary text-center">
+<tr>
+<th>Timestamp</th>
+<th>Nama</th>
+<th>Domisili</th>
+<th>Telp</th>
+<th>Usia</th>
+<th>Pendidikan</th>
+<th>Jurusan</th>
+</tr>
+</thead>
 
-    </div>
-  </div>
+<tbody id="tbody">
+<tr><td colspan="7" class="text-center text-muted">Loading...</td></tr>
+</tbody>
+</table>
+
+<!-- PAGINATION -->
+<div class="d-flex justify-content-between align-items-center">
+<button class="btn btn-outline-primary btn-sm" onclick="prevPage()">← Prev</button>
+<span id="pageInfo" class="fw-semibold"></span>
+<button class="btn btn-outline-primary btn-sm" onclick="nextPage()">Next →</button>
+</div>
+
+</div>
+</div>
 
 </div>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbw-ceppbzESsgyg32fsT-HGqvdiJ7TESIMeqZIrpjYcrDHE-Vm62wLu28uk9F7Ybo1n/exec";
+const API = "https://script.google.com/macros/s/AKfycbzvijXzjvBYX9UED5ufPR5up9LEyesf_Rd3VgFUwNB1N1DqPGRHnMx1r74n3fF6eDNX/exec";
 
-fetch(API_URL)
-  .then(res => res.json())
-  .then(data => {
-    const tbody = document.getElementById("table-body");
-    tbody.innerHTML = "";
+let page  = 1;
+let limit = 20;
+let total = 0;
 
-    data.forEach(row => {
-      tbody.innerHTML += `
-        <tr>
-          <td class="text-center">${row.Timestamp}</td>
-          <td class="fw-semibold">${row.nama}</td>
-          <td class="fw-semibold">${row.domisili}</td>
-          <td>
-            <i class="bi bi-whatsapp text-success"></i>
-            ${row.telp}
-          </td>
-          <td class="text-center">
-            <span class="badge bg-secondary">${row.usia} th</span>
-          </td>
-          <td class="text-center">
-            <span class="badge badge-edu">${row.pendidikan}</span>
-          </td>
-          <td>${row.Jurusan}</td>
-        </tr>
-      `;
+function loadData(){
+  fetch(`${API}?page=${page}&limit=${limit}`)
+    .then(res=>res.json())
+    .then(res=>{
+      total = res.total;
+      renderTable(res.data);
+      renderInfo();
     });
-  })
-  .catch(err => {
-    document.getElementById("table-body").innerHTML = `
-      <tr>
-        <td colspan="6" class="text-center text-danger">
-          <i class="bi bi-exclamation-triangle-fill"></i> Gagal memuat data
-        </td>
-      </tr>
-    `;
-    console.error(err);
-  });
+}
+
+function renderTable(data){
+  const tbody = document.getElementById("tbody");
+  if(!data.length){
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">Tidak ada data</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = data.map(r=>`
+    <tr>
+      <td>${r.Timestamp}</td>
+      <td class="fw-semibold">${r.nama}</td>
+      <td>${r.domisili}</td>
+      <td>${r.telp}</td>
+      <td class="text-center">${r.usia} th</td>
+      <td class="text-center">${r.pendidikan}</td>
+      <td>${r.Jurusan}</td>
+    </tr>
+  `).join("");
+}
+
+function renderInfo(){
+  const maxPage = Math.ceil(total / limit);
+  document.getElementById("pageInfo").innerText =
+    `Page ${page} / ${maxPage} • Total ${total} data`;
+}
+
+function nextPage(){
+  if(page * limit < total){
+    page++;
+    loadData();
+  }
+}
+
+function prevPage(){
+  if(page > 1){
+    page--;
+    loadData();
+  }
+}
+
+loadData();
 </script>
 
 </body>
