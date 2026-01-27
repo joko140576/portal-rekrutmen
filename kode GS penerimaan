@@ -1,13 +1,10 @@
 /* ======================================
    KONFIGURASI
 ====================================== */
-const SHEET_NAME = "data"; 
-// ganti jika nama sheet berbeda
+const SHEET_NAME = "data";
 
 /* ======================================
    GET DATA (READ)
-   dipanggil oleh:
-   fetch(API + "?action=getData")
 ====================================== */
 function doGet(e) {
   if (e.parameter.action === "getData") {
@@ -26,17 +23,16 @@ function getData() {
 
   const lastRow = sheet.getLastRow();
 
-  // jika belum ada data
   if (lastRow < 2) {
     return ContentService
       .createTextOutput(JSON.stringify([]))
       .setMimeType(ContentService.MimeType.JSON);
   }
 
-  // Ambil data tanpa header (kolom A–G)
   const data = sheet
     .getRange(2, 1, lastRow - 1, 7)
-    .getValues();
+    .getDisplayValues(); 
+    // ⬅️ PENTING: pakai getDisplayValues agar format tetap
 
   return ContentService
     .createTextOutput(JSON.stringify(data))
@@ -45,35 +41,33 @@ function getData() {
 
 /* ======================================
    POST DATA (CREATE)
-   dipanggil oleh:
-   fetch(API, { method:"POST", body:FormData })
 ====================================== */
 function doPost(e) {
   const sheet = SpreadsheetApp
     .getActiveSpreadsheet()
     .getSheetByName(SHEET_NAME);
 
-  // FORMAT TANGGAL LAHIR (YYYY-MM-DD) — TANPA JAM
+  // FORMAT TANGGAL LAHIR → dd-MM-yyyy
   const tanggalLahir = e.parameter.tanggal
     ? Utilities.formatDate(
         new Date(e.parameter.tanggal),
         Session.getScriptTimeZone(),
-        "yyyy-MM-dd"
+        "dd-MM-yyyy"
       )
     : "";
 
   sheet.appendRow([
     e.parameter.nama || "",
     e.parameter.tempat || "",
-    tanggalLahir,                // TANGGAL BERSIH
+    tanggalLahir,                 // ✅ dd-MM-yyyy
     e.parameter.domisili || "",
     e.parameter.pendidikan || "",
     e.parameter.telp || "",
     e.parameter.jabatan || "",
-    Utilities.formatDate(         // TIMESTAMP SIMPAN
+    Utilities.formatDate(          // timestamp (opsional)
       new Date(),
       Session.getScriptTimeZone(),
-      "yyyy-MM-dd HH:mm:ss"
+      "dd-MM-yyyy HH:mm:ss"
     )
   ]);
 
