@@ -1,18 +1,47 @@
-function doGet() {
+function doGet(e) {
   const sheet = SpreadsheetApp
     .openById("1znrCa83ChXLSxVlpE3A_WmXV87zKDdYQoN5MaCVRiDk")
     .getSheetByName("Data");
 
-  const data = sheet.getDataRange().getValues();
-  const headers = data.shift();
+  const page  = Number(e.parameter.page)  || 1;
+  const limit = Number(e.parameter.limit) || 20;
 
-  const result = data.map(row => {
-    let obj = {};
-    headers.forEach((h, i) => obj[h] = row[i]);
-    return obj;
+  const lastRow = sheet.getLastRow();
+  const lastCol = sheet.getLastColumn();
+
+  if (lastRow < 2) {
+    return json({ data: [], total: 0 });
+  }
+
+  const totalData = lastRow - 1;
+  const startRow = totalData - (page * limit) + 2;
+
+  if (startRow < 2) {
+    return json({ data: [], total: totalData });
+  }
+
+  const numRows = Math.min(limit, startRow - 1);
+
+  const headers = sheet.getRange(1,1,1,lastCol).getValues()[0];
+  const values  = sheet
+    .getRange(startRow,1,numRows,lastCol)
+    .getDisplayValues()
+    .reverse();
+
+  const data = values.map(r => {
+    let o = {};
+    headers.forEach((h,i)=> o[h] = r[i]);
+    return o;
   });
 
+  return json({
+    data,
+    total: totalData
+  });
+}
+
+function json(obj){
   return ContentService
-    .createTextOutput(JSON.stringify(result))
+    .createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
 }
