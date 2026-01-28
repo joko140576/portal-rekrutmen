@@ -105,6 +105,23 @@ body {
   text-align: center;
 }
 
+.scroll-container {
+  padding-bottom: 100px; /* jarak scrollbar ke card */
+}
+
+.scroll-container::-webkit-scrollbar {
+  height: 8px;
+}
+.scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(0,234,255,.7);
+  border-radius: 10px;
+}
+
+.scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+
 </style>
 </head>
 
@@ -130,9 +147,10 @@ body {
 <div class="container py-5">
   <h2 class="text-center mb-5 fw-bold text-info">Skema Proses Rekrutmen</h2>
 
-  <div class="row g-4 justify-content-center">
+ <div class="d-flex gap-4 justify-content-start overflow-auto py-2 px-2 scroll-container">
 
-    <div class="col-md-4 col-lg-2">
+
+    <div class="col-2 flex-shrink-0">
       <div class="process-card" onclick="openModal('Lowongan')">
         <i class="bi bi-briefcase-fill"></i>
         <div>Tahap 1</div>
@@ -140,7 +158,7 @@ body {
       </div>
     </div>
 
-    <div class="col-md-4 col-lg-2">
+    <div class="col-2 flex-shrink-0">
       <div class="process-card" onclick="openModal('checker')">
         <i class="bi bi-funnel-fill"></i>
         <div>Tahap 2</div>
@@ -148,7 +166,7 @@ body {
       </div>
     </div>
 
-    <div class="col-md-4 col-lg-2">
+    <div class="col-2 flex-shrink-0">
       <div class="process-card" onclick="openModal('Wawancara')">
         <i class="bi bi-chat-dots-fill"></i>
         <div>Tahap 3</div>
@@ -156,7 +174,7 @@ body {
       </div>
     </div>
 
-    <div class="col-md-4 col-lg-2">
+    <div class="col-2 flex-shrink-0">
       <div class="process-card" onclick="openModal('Test')">
         <i class="bi bi-pencil-square"></i>
         <div>Tahap 4</div>
@@ -164,7 +182,7 @@ body {
       </div>
     </div>
 
-    <div class="col-md-4 col-lg-2">
+    <div class="col-2 flex-shrink-0">
       <div class="process-card" onclick="openModal('Penerimaan')">
         <i class="bi bi-check-circle-fill"></i>
         <div>Tahap 5</div>
@@ -172,10 +190,18 @@ body {
       </div>
     </div>
 
-    <div class="col-md-4 col-lg-2">
-      <div class="process-card" onclick="openModal('Onboard Training')">
+   <div class="col-2 flex-shrink-0">
+      <div class="process-card" onclick="openModal('Upload')">
         <i class="bi bi-people-fill"></i>
         <div>Tahap 6</div>
+        <strong>Upload Dokument </strong>
+      </div>
+    </div>
+
+   <div class="col-2 flex-shrink-0">
+      <div class="process-card" onclick="openModal('Onboard Training')">
+        <i class="bi bi-people-fill"></i>
+        <div>Tahap 7</div>
         <strong>Onboard Training</strong>
       </div>
     </div>
@@ -297,6 +323,19 @@ const modalData = {
     `,
     link: "penerimaan.html"
   },
+
+  "Upload": {
+    desc: `
+      <p>Upload semua dokument yang diperlukan untuk penandatangan kontrak</p>
+      <ul>
+        <li>Klik Tombol buka halaman dibawah ini </li>
+        <li>Upload semua dokument oleh Sentra </li>
+        <li>Konfirmasi ke HCC unit rekrut </li>
+      </ul>
+    `,
+    link: "https://docs.google.com/forms/d/e/1FAIpQLSciQzyfUcCNYzuIzY62UsEfacVTdP5g8IbQ8-3Y40pT4MKvkg/viewform"
+  },
+
   "Onboard Training": {
     desc: `
       <p>Program onboarding dan pelatihan awal bagi karyawan baru.</p>
