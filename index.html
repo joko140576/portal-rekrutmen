@@ -356,16 +356,18 @@ const modalData = {
   }
 };
 
+
 function openModal(title) {
   const data = modalData[title];
 
   document.getElementById('modalTitle').innerText = title;
   document.getElementById('modalDesc').innerHTML = data.desc;
   document.getElementById('modalLink').href = data.link;
-  document.getElementById('modalhasil').href = data.hasil;
 
   const dbBtn = document.getElementById('modalDatabase');
+  const hasilBtn = document.getElementById('modalhasil');
 
+  // Database button
   if (data.database) {
     dbBtn.href = data.database;
     dbBtn.classList.remove("d-none");
@@ -373,8 +375,20 @@ function openModal(title) {
     dbBtn.classList.add("d-none");
   }
 
-  new bootstrap.Modal(document.getElementById('infoModal')).show();
+  // Hasil button
+  if (data.hasil) {
+    hasilBtn.href = data.hasil;
+    hasilBtn.classList.remove("d-none");
+  } else {
+    hasilBtn.classList.add("d-none");
+  }
+
+  // === BUAT MODAL SEKALI SAJA ===
+  const modalEl = document.getElementById('infoModal');
+  const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+  modal.show();
 }
+
 
 
 
